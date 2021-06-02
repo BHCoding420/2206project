@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1622671474 source:c:\users\lenovo\desktop\programming and html\data structures\synonyms\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
