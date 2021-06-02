@@ -199,6 +199,31 @@ BT InsertBST(BT t,dictionary d)
 
 int main()
 {
+    dictionary NodeTwodictionary;
+    NodeTwodictionary.word = "sad";
+
+
+    List* NodeTwodictionaryList1 = createList();
+    insertTail(NodeTwodictionaryList1,"upset");
+    insertTail(NodeTwodictionaryList1,"angry");
+    display(*NodeTwodictionaryList1);
+
+    for(int i = 0;i < N;i++)
+    {
+        NodeTwodictionary.synonymsLists[i] = createList();
+    }
+    NodeTwodictionary.synonymsLists[0] = NodeTwodictionaryList1;
+    display(*NodeTwodictionary.synonymsLists[0]);
+
+    BT node2 = addnode(NodeTwodictionary,NULL,NULL);
+    display( *(node2->obj->synonymsLists[0]) );
+
+
+
+
+
+
+
 
     dictionary rootdictionary;
     rootdictionary.word = "happy";
@@ -215,6 +240,9 @@ int main()
     }
     rootdictionary.synonymsLists[0] = rootdictionaryList1;
     display(*rootdictionary.synonymsLists[0]);
+
+    BT rootnode = addnode(rootdictionary,node2,NULL);
+    display( *(rootnode->obj->synonymsLists[0]) );
 
 
 
