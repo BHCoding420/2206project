@@ -154,6 +154,20 @@ typedef struct dictionary {
 
 } dictionary;
 
+dictionary createDictionary(char* w) {
+    dictionary d;
+    d.word = w;
+
+    for(int i = 0;i < N;i++)
+    {
+        d.synonymsLists[i] = createList();
+
+    }
+
+    return d;
+
+
+}
 typedef struct node{
      dictionary* obj;
     struct node *right, *left;
@@ -162,22 +176,39 @@ typedef struct node{
 int empty(BT a){ return (a==NULL);}
 
 
-BT addnode(dictionary d, BT l, BT r)
+BT addnode(dictionary* d, BT l, BT r)
 {
     BT t= (BT)malloc(sizeof(struct node));
     t->left=l;
     t->right=r;
-    t->obj=&d;
+    t->obj=d;
     return t;
 }
 
-BT InsertBST(BT t,dictionary d)
+void InOrder(BT A)
+{
+if (A ==NULL) return;
+InOrder(A ->left);
+printf("word: %s \n", A->obj->word);
+for(int i = 0;i < 10;i++)
+{
+    if(!LLisEmpty(*(A->obj->synonymsLists[i])))
+    {
+        printf("list at index %d :",i);
+        display(*(A->obj->synonymsLists[i]) );
+    }
+}
+printf("---------- \n");
+InOrder(A ->right);
+}
+
+BT InsertBST(BT t,dictionary* d)
 {
     if(empty(t))
     {
         struct node * n;
          n=(struct node *)malloc(sizeof(struct node));
-         n->obj=&d;
+         n->obj=d;
          n->right=NULL;
          n->left=NULL;
 
@@ -188,10 +219,19 @@ BT InsertBST(BT t,dictionary d)
     else
     {
 
-        if(comparison(t->obj->word,d.word)==0)
+        if(comparison(t->obj->word,d->word)==0)
+        {
+            //printf("%s is smaller than %s \n",t->obj->word,d->word);
             t->right=InsertBST(t->right,d);
+        }
+
         else
+        {
+            //printf("%s is bigger than %s \n",t->obj->word,d->word);
             t->left=InsertBST(t->left,d);
+
+        }
+
         return t;
     }
 
@@ -199,62 +239,93 @@ BT InsertBST(BT t,dictionary d)
 
 int main()
 {
-    dictionary NodeTwodictionary;
-    NodeTwodictionary.word = "sad";
+    dictionary NodeTwodictionary = createDictionary("happy");
 
 
     List* NodeTwodictionaryList1 = createList();
-    insertTail(NodeTwodictionaryList1,"upset");
-    insertTail(NodeTwodictionaryList1,"angry");
-    display(*NodeTwodictionaryList1);
+    insertTail(NodeTwodictionaryList1,"amused");
+    insertTail(NodeTwodictionaryList1,"excited");
 
-    for(int i = 0;i < N;i++)
-    {
-        NodeTwodictionary.synonymsLists[i] = createList();
-    }
-    NodeTwodictionary.synonymsLists[0] = NodeTwodictionaryList1;
-    display(*NodeTwodictionary.synonymsLists[0]);
-
-    BT node2 = addnode(NodeTwodictionary,NULL,NULL);
-    display( *(node2->obj->synonymsLists[0]) );
+    List* NodeTwodictionaryList2 = createList();
+    insertTail(NodeTwodictionaryList2,"enjoying");
 
 
+    //display(*NodeTwodictionaryList1);
+
+
+    NodeTwodictionary.synonymsLists[1] = NodeTwodictionaryList1;
+     NodeTwodictionary.synonymsLists[3] = NodeTwodictionaryList2;
+    //display(*NodeTwodictionary.synonymsLists[0]);
+
+    BT node2 = addnode(&NodeTwodictionary,NULL,NULL);
+    //printf("word: %s \n", node2->obj->word);
+    //display( *(node2->obj->synonymsLists[0]) );
 
 
 
 
 
 
-    dictionary rootdictionary;
-    rootdictionary.word = "happy";
 
+
+    dictionary rootdictionary = createDictionary("sad");
+
+    //printf("word: %s \n", rootdictionary.word);
 
     List* rootdictionaryList1 = createList();
-    insertTail(rootdictionaryList1,"amused");
-    insertTail(rootdictionaryList1,"overwhelmed");
-    display(*rootdictionaryList1);
+    insertTail(rootdictionaryList1,"upset");
+    insertTail(rootdictionaryList1,"angry");
+    //display(*rootdictionaryList1);
 
-    for(int i = 0;i < N;i++)
-    {
-        rootdictionary.synonymsLists[i] = createList();
-    }
     rootdictionary.synonymsLists[0] = rootdictionaryList1;
-    display(*rootdictionary.synonymsLists[0]);
+    //display(*rootdictionary.synonymsLists[0]);
 
-    BT rootnode = addnode(rootdictionary,node2,NULL);
-    display( *(rootnode->obj->synonymsLists[0]) );
-
+    BT rootnode = addnode(&rootdictionary,node2,NULL);
 
 
 
+    //printf("word: %s \n", rootnode->obj->word);
+    //display( *(rootnode->obj->synonymsLists[0]) );
+    InOrder(rootnode);
     //rootdictionary.synonymsLists = rootdictionaryLists;
 
     //display(*rootdictionary.synonymsLists[0]);
 
     //BT root = addnode()
 
+    dictionary nodethreedictionary = createDictionary("way");
+    List* NodethreedictionaryList1 = createList();
+    insertTail(NodethreedictionaryList1,"path");
+
+    nodethreedictionary.synonymsLists[0] = NodethreedictionaryList1;
+
+    //BT node3 = addnode(&nodethreedictionary,NULL,NULL);
+   InsertBST(rootnode,&nodethreedictionary);
+   printf("after insertion of way : \n");
+   InOrder(rootnode);
 
 
+    dictionary nodefourdictionary = createDictionary("only");
+    List* NodefourdictionaryList1 = createList();
+    insertTail(NodefourdictionaryList1,"solely");
+
+    nodefourdictionary.synonymsLists[0] = NodefourdictionaryList1;
+
+    InsertBST(rootnode,&nodefourdictionary);
+    printf("after insertion of only : \n");
+   InOrder(rootnode);
+
+    dictionary nodefivedictionary = createDictionary("broad");
+    List* NodefivedictionaryList1 = createList();
+    insertTail(NodefivedictionaryList1,"wide");
+
+    nodefivedictionary.synonymsLists[0] = NodefivedictionaryList1;
+
+    InsertBST(rootnode,&nodefivedictionary);
+
+
+    printf("after insertion of broad : \n");
+   InOrder(rootnode);
 
 
 
